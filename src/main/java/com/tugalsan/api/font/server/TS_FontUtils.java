@@ -1,6 +1,7 @@
 package com.tugalsan.api.font.server;
 
 import com.tugalsan.api.file.server.TS_FileUtils;
+import com.tugalsan.api.font.client.TGS_FontFamily;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -35,5 +36,14 @@ public class TS_FontUtils {
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
             return font;
         });
+    }
+
+    public static TGS_FontFamily<Font> toFont(TGS_FontFamily<Path> fontFalimyPath, int derivedFontHeight) {
+        return new TGS_FontFamily(
+                of(fontFalimyPath.regular(), derivedFontHeight),
+                of(fontFalimyPath.bold(), derivedFontHeight),
+                of(fontFalimyPath.italic(), derivedFontHeight),
+                of(fontFalimyPath.boldItalic(), derivedFontHeight)
+        );
     }
 }
