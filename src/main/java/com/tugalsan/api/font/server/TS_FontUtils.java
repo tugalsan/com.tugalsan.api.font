@@ -2,10 +2,12 @@ package com.tugalsan.api.font.server;
 
 import com.tugalsan.api.file.server.TS_FileUtils;
 import com.tugalsan.api.font.client.TGS_FontFamily;
+import com.tugalsan.api.stream.client.TGS_StreamUtils;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 
 public class TS_FontUtils {
@@ -44,6 +46,13 @@ public class TS_FontUtils {
                 of(fontFalimyPath.bold(), derivedFontHeight),
                 of(fontFalimyPath.italic(), derivedFontHeight),
                 of(fontFalimyPath.boldItalic(), derivedFontHeight)
+        );
+    }
+
+    public static List<TGS_FontFamily<Font>> toFont(List<TGS_FontFamily<Path>> fontFalimyPaths, int derivedFontHeight) {
+        return TGS_StreamUtils.toLst(
+                fontFalimyPaths.stream()
+                        .map(ffp -> toFont(ffp, derivedFontHeight))
         );
     }
 }
