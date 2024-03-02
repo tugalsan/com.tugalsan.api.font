@@ -3,6 +3,8 @@ package com.tugalsan.api.font.server;
 import com.tugalsan.api.file.server.TS_FileUtils;
 import com.tugalsan.api.font.client.TGS_FontFamily;
 import com.tugalsan.api.stream.client.TGS_StreamUtils;
+import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
+import com.tugalsan.api.tuple.client.TGS_Tuple2;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -28,6 +30,10 @@ public class TS_FontUtils {
     }
 
     public static Font of(Path fontPath, int derivedFontHeight) {
+        var found = of_buffer.stream().filter(t -> t.value0.equals(fontPath)).findAny().orElse(null);
+        if (found != null) {
+            return found.value1;
+        }
         return TGS_UnSafe.call(() -> {
             var typeStr = TS_FileUtils.getNameType(fontPath).toLowerCase();
             if (!Objects.equals(typeStr, "ttf")) {
@@ -39,6 +45,7 @@ public class TS_FontUtils {
             return font;
         });
     }
+    final private static TS_ThreadSyncLst<TGS_Tuple2<Path, Font>> of_buffer = TS_ThreadSyncLst.of();
 
     public static TGS_FontFamily<Font> toFont(TGS_FontFamily<Path> fontFalimyPath, int derivedFontHeight) {
         return new TGS_FontFamily(
