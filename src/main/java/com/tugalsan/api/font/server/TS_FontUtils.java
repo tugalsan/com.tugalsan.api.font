@@ -30,9 +30,12 @@ public class TS_FontUtils {
     }
 
     public static Font of(Path fontPath, int derivedFontHeight) {
-        var found = of_buffer.stream().filter(t -> t.value0.equals(fontPath)).findAny().orElse(null);
-        if (found != null) {
-            return found.value1;
+        var fontAlreadyExists = of_buffer.stream()
+                .filter(t -> t.value0.equals(fontPath))
+                .map(t -> t.value1)
+                .findAny().orElse(null);
+        if (fontAlreadyExists != null) {
+            return fontAlreadyExists;
         }
         return TGS_UnSafe.call(() -> {
             var typeStr = TS_FileUtils.getNameType(fontPath).toLowerCase();
