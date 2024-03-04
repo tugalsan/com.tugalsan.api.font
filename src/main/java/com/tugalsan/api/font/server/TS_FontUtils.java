@@ -2,9 +2,9 @@ package com.tugalsan.api.font.server;
 
 import com.tugalsan.api.file.server.TS_FileUtils;
 import com.tugalsan.api.font.client.TGS_FontFamily;
+import com.tugalsan.api.list.client.TGS_ListUtils;
 import com.tugalsan.api.stream.client.TGS_StreamUtils;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
-import com.tugalsan.api.tuple.client.TGS_Tuple2;
 import com.tugalsan.api.tuple.client.TGS_Tuple3;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import java.awt.Font;
@@ -67,6 +67,13 @@ public class TS_FontUtils {
         return TGS_StreamUtils.toLst(
                 fontFalimyPaths.stream()
                         .map(ffp -> toFont(ffp, derivedFontHeight))
+        );
+    }
+
+    public static List<String> listRegisteredFontNames() {
+        return TGS_ListUtils.of(
+                GraphicsEnvironment.getLocalGraphicsEnvironment()
+                        .getAvailableFontFamilyNames()
         );
     }
 }
