@@ -5,6 +5,7 @@ import com.tugalsan.api.font.client.TGS_FontFamily;
 import com.tugalsan.api.stream.client.TGS_StreamUtils;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
 import com.tugalsan.api.tuple.client.TGS_Tuple2;
+import com.tugalsan.api.tuple.client.TGS_Tuple3;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -32,12 +33,13 @@ public class TS_FontUtils {
     public static Font of(Path fontPath, int derivedFontHeight) {
         var fontAlreadyExists = of_buffer.stream()
                 .filter(t -> t.value0.equals(fontPath))
-                .map(t -> t.value1)
+                .filter(t -> t.value1.equals(derivedFontHeight))
+                .map(t -> t.value2)
                 .findAny().orElse(null);
         if (fontAlreadyExists != null) {
             return fontAlreadyExists;
         }
-        var newFont =  TGS_UnSafe.call(() -> {
+        var newFont = TGS_UnSafe.call(() -> {
             var typeStr = TS_FileUtils.getNameType(fontPath).toLowerCase();
             if (!Objects.equals(typeStr, "ttf")) {
                 throw new IllegalArgumentException("Unknown font type '%s'".formatted(typeStr));
@@ -47,10 +49,10 @@ public class TS_FontUtils {
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
             return font;
         });
-        of_buffer.add(TGS_Tuple2.of(fontPath, newFont));
+        of_buffer.add(TGS_Tuple3.of(fontPath, derivedFontHeight, newFont));
         return newFont;
     }
-    final private static TS_ThreadSyncLst<TGS_Tuple2<Path, Font>> of_buffer = TS_ThreadSyncLst.of();
+    final private static TS_ThreadSyncLst<TGS_Tuple3<Path, Integer, Font>> of_buffer = TS_ThreadSyncLst.of();
 
     public static TGS_FontFamily<Font> toFont(TGS_FontFamily<Path> fontFalimyPath, int derivedFontHeight) {
         return new TGS_FontFamily(
