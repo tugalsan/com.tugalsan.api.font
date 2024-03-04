@@ -37,7 +37,7 @@ public class TS_FontUtils {
         if (fontAlreadyExists != null) {
             return fontAlreadyExists;
         }
-        return TGS_UnSafe.call(() -> {
+        var newFont =  TGS_UnSafe.call(() -> {
             var typeStr = TS_FileUtils.getNameType(fontPath).toLowerCase();
             if (!Objects.equals(typeStr, "ttf")) {
                 throw new IllegalArgumentException("Unknown font type '%s'".formatted(typeStr));
@@ -47,6 +47,8 @@ public class TS_FontUtils {
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
             return font;
         });
+        of_buffer.add(TGS_Tuple2.of(fontPath, newFont));
+        return newFont;
     }
     final private static TS_ThreadSyncLst<TGS_Tuple2<Path, Font>> of_buffer = TS_ThreadSyncLst.of();
 
