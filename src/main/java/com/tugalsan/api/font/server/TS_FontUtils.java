@@ -46,15 +46,15 @@ public class TS_FontUtils {
     }
 
     private static Font of(Path path, int height, int style) {
-        var fontAlreadyExists = fontBuffer.stream()
-                .filter(t -> t.path.equals(path))
-                .filter(t -> t.style == style)
-                .filter(t -> t.height == height)
-                .map(t -> t.font)
-                .findAny().orElse(null);
-        if (fontAlreadyExists != null) {
-            return fontAlreadyExists;
-        }
+//        var fontAlreadyExists = fontBuffer.stream()
+//                .filter(t -> t.path.equals(path))
+//                .filter(t -> t.style == style)
+//                .filter(t -> t.height == height)
+//                .map(t -> t.font)
+//                .findAny().orElse(null);
+//        if (fontAlreadyExists != null) {
+//            return fontAlreadyExists;
+//        }
         var newFont = TGS_UnSafe.call(() -> {
             var typeStr = TS_FileUtils.getNameType(path).toLowerCase();
             if (!Objects.equals(typeStr, "ttf")) {
@@ -65,14 +65,14 @@ public class TS_FontUtils {
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
             return font;
         });
-        fontBuffer.add(new FontBufferItem(path, height, style, newFont));
+//        fontBuffer.add(new FontBufferItem(path, height, style, newFont));
         return newFont;
     }
-    final private static TS_ThreadSyncLst<FontBufferItem> fontBuffer = TS_ThreadSyncLst.of();
-
-    final private record FontBufferItem(Path path, int height, int style, Font font) {
-
-    }
+//    final private static TS_ThreadSyncLst<FontBufferItem> fontBuffer = TS_ThreadSyncLst.of();
+//
+//    final private record FontBufferItem(Path path, int height, int style, Font font) {
+//
+//    }
 
     public static TGS_FontFamily<Font> toFont(TGS_FontFamily<Path> fontFalimyPath, int derivedFontHeight) {
         return new TGS_FontFamily(
