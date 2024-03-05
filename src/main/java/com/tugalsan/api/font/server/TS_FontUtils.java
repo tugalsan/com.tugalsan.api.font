@@ -29,23 +29,23 @@ public class TS_FontUtils {
         return font.canDisplay(codePoint);
     }
 
-    public static Font ofPlain(Path fontPath, int derivedFontHeight) {
-        return of(fontPath, derivedFontHeight, Font.PLAIN);
+    public static Font ofPlain(Path fontPath, float height) {
+        return of(fontPath, height, Font.PLAIN);
     }
 
-    public static Font ofBold(Path fontPath, int derivedFontHeight) {
-        return of(fontPath, derivedFontHeight, Font.BOLD);
+    public static Font ofBold(Path fontPath, float height) {
+        return of(fontPath, height, Font.BOLD);
     }
 
-    public static Font ofItalic(Path fontPath, int derivedFontHeight) {
-        return of(fontPath, derivedFontHeight, Font.ITALIC);
+    public static Font ofItalic(Path fontPath, float height) {
+        return of(fontPath, height, Font.ITALIC);
     }
 
-    public static Font ofBoldItalic(Path fontPath, int derivedFontHeight) {
-        return of(fontPath, derivedFontHeight, Font.BOLD | Font.ITALIC);
+    public static Font ofBoldItalic(Path fontPath, float height) {
+        return of(fontPath, height, Font.BOLD | Font.ITALIC);
     }
 
-    private static Font of(Path path, int height, int style) {
+    private static Font of(Path path, float height, int style) {
 //        var fontAlreadyExists = fontBuffer.stream()
 //                .filter(t -> t.path.equals(path))
 //                .filter(t -> t.style == style)
