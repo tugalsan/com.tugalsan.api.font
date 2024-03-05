@@ -74,19 +74,19 @@ public class TS_FontUtils {
 //
 //    }
 
-    public static TGS_FontFamily<Font> toFont(TGS_FontFamily<Path> fontFalimyPath, int derivedFontHeight) {
+    public static TGS_FontFamily<Font> toFont(TGS_FontFamily<Path> fontFalimyPath, float height) {
         return new TGS_FontFamily(
-                ofPlain(fontFalimyPath.regular(), derivedFontHeight),//USE REGULAR FOR JAVA
-                ofBold(fontFalimyPath.regular(), derivedFontHeight),//USE REGULAR FOR JAVA
-                ofItalic(fontFalimyPath.regular(), derivedFontHeight),//USE REGULAR FOR JAVA
-                ofBoldItalic(fontFalimyPath.regular(), derivedFontHeight)//USE REGULAR FOR JAVA
+                ofPlain(fontFalimyPath.regular(), height),//USE REGULAR FOR JAVA
+                ofBold(fontFalimyPath.regular(), height),//USE REGULAR FOR JAVA
+                ofItalic(fontFalimyPath.regular(), height),//USE REGULAR FOR JAVA
+                ofBoldItalic(fontFalimyPath.regular(), height)//USE REGULAR FOR JAVA
         );
     }
 
-    public static List<TGS_FontFamily<Font>> toFont(List<TGS_FontFamily<Path>> fontFalimyPaths, int derivedFontHeight) {
+    public static List<TGS_FontFamily<Font>> toFont(List<TGS_FontFamily<Path>> fontFalimyPaths, float height) {
         return TGS_StreamUtils.toLst(
                 fontFalimyPaths.stream()
-                        .map(ffp -> toFont(ffp, derivedFontHeight))
+                        .map(ffp -> toFont(ffp, height))
         );
     }
 
