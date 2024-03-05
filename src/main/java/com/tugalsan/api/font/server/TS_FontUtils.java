@@ -5,7 +5,6 @@ import com.tugalsan.api.font.client.TGS_FontFamily;
 import com.tugalsan.api.list.client.TGS_ListUtils;
 import com.tugalsan.api.stream.client.TGS_StreamUtils;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
-import com.tugalsan.api.tuple.client.TGS_Tuple3;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -30,36 +29,57 @@ public class TS_FontUtils {
         return font.canDisplay(codePoint);
     }
 
-    public static Font of(Path fontPath, int derivedFontHeight) {
-        var fontAlreadyExists = of_buffer.stream()
-                .filter(t -> t.value0.equals(fontPath))
-                .filter(t -> t.value1.equals(derivedFontHeight))
-                .map(t -> t.value2)
+    public static Font ofPlain(Path fontPath, int derivedFontHeight) {
+        return of(fontPath, derivedFontHeight, Font.PLAIN);
+    }
+
+    public static Font ofBold(Path fontPath, int derivedFontHeight) {
+        return of(fontPath, derivedFontHeight, Font.BOLD);
+    }
+
+    public static Font ofItalic(Path fontPath, int derivedFontHeight) {
+        return of(fontPath, derivedFontHeight, Font.ITALIC);
+    }
+
+    public static Font ofBoldItalic(Path fontPath, int derivedFontHeight) {
+        return of(fontPath, derivedFontHeight, Font.BOLD | Font.ITALIC);
+    }
+
+    private static Font of(Path path, int height, int style) {
+        var fontAlreadyExists = fontBuffer.stream()
+                .filter(t -> t.path.equals(path))
+                .filter(t -> t.style == style)
+                .filter(t -> t.height == height)
+                .map(t -> t.font)
                 .findAny().orElse(null);
         if (fontAlreadyExists != null) {
             return fontAlreadyExists;
         }
         var newFont = TGS_UnSafe.call(() -> {
-            var typeStr = TS_FileUtils.getNameType(fontPath).toLowerCase();
+            var typeStr = TS_FileUtils.getNameType(path).toLowerCase();
             if (!Objects.equals(typeStr, "ttf")) {
                 throw new IllegalArgumentException("Unknown font type '%s'".formatted(typeStr));
             }
             var fontType = Font.TRUETYPE_FONT;
-            var font = Font.createFont(fontType, fontPath.toFile()).deriveFont(derivedFontHeight);
+            var font = Font.createFont(fontType, path.toFile()).deriveFont(style, height);
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
             return font;
         });
-        of_buffer.add(TGS_Tuple3.of(fontPath, derivedFontHeight, newFont));
+        fontBuffer.add(new FontBufferItem(path, height, style, newFont));
         return newFont;
     }
-    final private static TS_ThreadSyncLst<TGS_Tuple3<Path, Integer, Font>> of_buffer = TS_ThreadSyncLst.of();
+    final private static TS_ThreadSyncLst<FontBufferItem> fontBuffer = TS_ThreadSyncLst.of();
+
+    final private record FontBufferItem(Path path, int height, int style, Font font) {
+
+    }
 
     public static TGS_FontFamily<Font> toFont(TGS_FontFamily<Path> fontFalimyPath, int derivedFontHeight) {
         return new TGS_FontFamily(
-                of(fontFalimyPath.regular(), derivedFontHeight),
-                of(fontFalimyPath.bold(), derivedFontHeight),
-                of(fontFalimyPath.italic(), derivedFontHeight),
-                of(fontFalimyPath.boldItalic(), derivedFontHeight)
+                ofPlain(fontFalimyPath.regular(), derivedFontHeight),//USE REGULAR FOR JAVA
+                ofBold(fontFalimyPath.regular(), derivedFontHeight),//USE REGULAR FOR JAVA
+                ofItalic(fontFalimyPath.regular(), derivedFontHeight),//USE REGULAR FOR JAVA
+                ofBoldItalic(fontFalimyPath.regular(), derivedFontHeight)//USE REGULAR FOR JAVA
         );
     }
 
