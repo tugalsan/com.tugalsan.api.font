@@ -2,7 +2,7 @@ package com.tugalsan.api.font.server;
 
 import com.tugalsan.api.coronator.client.TGS_Coronator;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
-import com.tugalsan.api.unsafe.client.TGS_UnSafe;
+import com.tugalsan.api.union.client.TGS_Union;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
@@ -50,10 +50,12 @@ public class TS_Font {
     final public Font font;
     final public String name;
 
-    public static TS_Font of(Path filePath) {
-        return TGS_UnSafe.call(() -> {
-            return new TS_Font(filePath);
-        });
+    public static TGS_Union<TS_Font> of(Path filePath) {
+        try {
+            return TGS_Union.of(new TS_Font(filePath));
+        } catch (FontFormatException | IOException ex) {
+            return TGS_Union.ofThrowable(ex);
+        }
     }
 
     public TS_Font derive(int height, STYLE style) {

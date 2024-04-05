@@ -4,10 +4,11 @@ import com.tugalsan.api.file.server.TS_FileUtils;
 import com.tugalsan.api.font.client.TGS_FontFamily;
 import com.tugalsan.api.list.client.TGS_ListUtils;
 import com.tugalsan.api.stream.client.TGS_StreamUtils;
-import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
-import com.tugalsan.api.unsafe.client.TGS_UnSafe;
+import com.tugalsan.api.union.client.TGS_Union;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
@@ -29,24 +30,25 @@ public class TS_FontUtils {
         return font.canDisplay(codePoint);
     }
 
-    public static Font ofPlain(Path fontPath, float height) {
+    public static TGS_Union<Font> ofPlain(Path fontPath, float height) {
         return of(fontPath, height, Font.PLAIN);
     }
 
-    public static Font ofBold(Path fontPath, float height) {
+    public static TGS_Union<Font> ofBold(Path fontPath, float height) {
         return of(fontPath, height, Font.BOLD);
     }
 
-    public static Font ofItalic(Path fontPath, float height) {
+    public static TGS_Union<Font> ofItalic(Path fontPath, float height) {
         return of(fontPath, height, Font.ITALIC);
     }
 
-    public static Font ofBoldItalic(Path fontPath, float height) {
+    public static TGS_Union<Font> ofBoldItalic(Path fontPath, float height) {
         return of(fontPath, height, Font.BOLD | Font.ITALIC);
     }
 
-    private static Font of(Path path, float height, int style) {
-//        var fontAlreadyExists = fontBuffer.stream()
+    private static TGS_Union<Font> of(Path path, float height, int style) {
+        try {
+            //        var fontAlreadyExists = fontBuffer.stream()
 //                .filter(t -> t.path.equals(path))
 //                .filter(t -> t.style == style)
 //                .filter(t -> t.height == height)
@@ -55,18 +57,18 @@ public class TS_FontUtils {
 //        if (fontAlreadyExists != null) {
 //            return fontAlreadyExists;
 //        }
-        var newFont = TGS_UnSafe.call(() -> {
             var typeStr = TS_FileUtils.getNameType(path).toLowerCase();
             if (!Objects.equals(typeStr, "ttf")) {
                 throw new IllegalArgumentException("Unknown font type '%s'".formatted(typeStr));
             }
             var fontType = Font.TRUETYPE_FONT;
-            var font = Font.createFont(fontType, path.toFile()).deriveFont(style, height);
-            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
-            return font;
-        });
+            var newFont = Font.createFont(fontType, path.toFile()).deriveFont(style, height);
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(newFont);
 //        fontBuffer.add(new FontBufferItem(path, height, style, newFont));
-        return newFont;
+            return TGS_Union.of(newFont);
+        } catch (FontFormatException | IOException ex) {
+            return TGS_Union.ofThrowable(ex);
+        }
     }
 //    final private static TS_ThreadSyncLst<FontBufferItem> fontBuffer = TS_ThreadSyncLst.of();
 //
