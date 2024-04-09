@@ -54,7 +54,7 @@ public class TS_Font {
         try {
             return TGS_Union.of(new TS_Font(filePath));
         } catch (FontFormatException | IOException ex) {
-            return TGS_Union.ofThrowable(ex);
+            return TGS_Union.ofExcuse(ex);
         }
     }
 

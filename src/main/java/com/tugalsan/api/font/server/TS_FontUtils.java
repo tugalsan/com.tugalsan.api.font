@@ -67,7 +67,7 @@ public class TS_FontUtils {
 //        fontBuffer.add(new FontBufferItem(path, height, style, newFont));
             return TGS_Union.of(newFont);
         } catch (FontFormatException | IOException ex) {
-            return TGS_Union.ofThrowable(ex);
+            return TGS_Union.ofExcuse(ex);
         }
     }
 //    final private static TS_ThreadSyncLst<FontBufferItem> fontBuffer = TS_ThreadSyncLst.of();
