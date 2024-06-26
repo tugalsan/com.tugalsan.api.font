@@ -1,6 +1,6 @@
 package com.tugalsan.api.font.server;
 
-import com.tugalsan.api.coronator.client.TGS_Coronator;
+import com.tugalsan.api.callable.client.TGS_CallableType1_Coronator;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import java.awt.Font;
@@ -21,7 +21,7 @@ public class TS_Font {
         this.filePath = fontBall.filePath;
         this.height = height;
         this.style = style;
-        this.font = TGS_Coronator.of(Font.class).coronateAs(__ -> {
+        this.font = TGS_CallableType1_Coronator.of(Font.class).coronateAs(__ -> {
             if (style == STYLE.BOLD) {
                 return fontBall.font.deriveFont(Font.BOLD, height);
             }
