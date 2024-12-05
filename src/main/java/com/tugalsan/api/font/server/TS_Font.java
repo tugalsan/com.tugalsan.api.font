@@ -15,7 +15,7 @@ public class TS_Font {
     public static enum STYLE {
         PLAIN, BOLD, ITALIC, BOLD_ITALIC;
     }
-    final public static TS_ThreadSyncLst<TS_Font> buffer = TS_ThreadSyncLst.of();
+//    final public static TS_ThreadSyncLst<TS_Font> buffer = TS_ThreadSyncLst.of();
 
     private TS_Font(TS_Font fontBall, int height, STYLE style) {
         this.filePath = fontBall.filePath;
