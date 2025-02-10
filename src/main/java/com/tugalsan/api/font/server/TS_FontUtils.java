@@ -4,7 +4,7 @@ import com.tugalsan.api.file.server.TS_FileUtils;
 import com.tugalsan.api.font.client.TGS_FontFamily;
 import com.tugalsan.api.list.client.TGS_ListUtils;
 import com.tugalsan.api.stream.client.TGS_StreamUtils;
-import com.tugalsan.api.unsafe.client.TGS_UnSafe;
+import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.nio.file.Path;
@@ -54,7 +54,7 @@ public class TS_FontUtils {
 //        if (fontAlreadyExists != null) {
 //            return fontAlreadyExists;
 //        }
-        var newFont = TGS_UnSafe.call(() -> {
+        var newFont = TGS_FuncMTCEUtils.call(() -> {
             var typeStr = TS_FileUtils.getNameType(path).toLowerCase();
             if (!Objects.equals(typeStr, "ttf")) {
                 throw new IllegalArgumentException("Unknown font type '%s'".formatted(typeStr));
