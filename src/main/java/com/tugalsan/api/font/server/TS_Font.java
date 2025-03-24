@@ -1,7 +1,7 @@
 package com.tugalsan.api.font.server;
 
-import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCEEffectivelyFinal;
-import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTUEffectivelyFinal;
+import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
@@ -20,7 +20,7 @@ public class TS_Font {
         this.filePath = fontBall.filePath;
         this.height = height;
         this.style = style;
-        this.font = TGS_FuncMTUCEEffectivelyFinal.of(Font.class).coronateAs(__ -> {
+        this.font = TGS_FuncMTUEffectivelyFinal.of(Font.class).coronateAs(__ -> {
             if (style == STYLE.BOLD) {
                 return fontBall.font.deriveFont(Font.BOLD, height);
             }
@@ -50,7 +50,7 @@ public class TS_Font {
     final public String name;
 
     public static TS_Font of(Path filePath) {
-        return TGS_FuncMTCEUtils.call(() -> {
+        return TGS_FuncMTCUtils.call(() -> {
             return new TS_Font(filePath);
         });
     }
