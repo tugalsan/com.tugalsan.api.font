@@ -1,15 +1,13 @@
 package com.tugalsan.api.font.server;
 
-import com.tugalsan.api.file.server.TS_FileUtils;
-import com.tugalsan.api.font.client.TGS_FontFamily;
-import com.tugalsan.api.list.client.TGS_ListUtils;
-import com.tugalsan.api.stream.client.TGS_StreamUtils;
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Objects;
+import module com.tugalsan.api.file;
+import module com.tugalsan.api.font;
+import module com.tugalsan.api.list;
+import module com.tugalsan.api.stream;
+import module com.tugalsan.api.function;
+import module java.desktop;
+import java.nio.file.*;
+import java.util.*;
 
 public class TS_FontUtils {
 

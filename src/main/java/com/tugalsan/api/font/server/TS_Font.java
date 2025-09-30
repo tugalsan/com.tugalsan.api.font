@@ -1,12 +1,9 @@
 package com.tugalsan.api.font.server;
 
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTUEffectivelyFinal;
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
-import java.io.IOException;
-import java.nio.file.Path;
+import module com.tugalsan.api.function;
+import module java.desktop;
+import java.io.*;
+import java.nio.file.*;
 
 @Deprecated//TODO: NOT USED
 public class TS_Font {
